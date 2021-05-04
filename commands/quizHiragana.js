@@ -3,7 +3,7 @@ const randomGenerator = require('../utils/randomNumber');
 const { hiragana, tentenHiragana, doubleHiragana } = require('../config.json');
 const { MessageEmbed } = require('discord.js');
 
-function askHiragana(message, cache) {
+function askHiragana(message, args, cache) {
 	let choosing = randomGenerator.random(0, Object.keys(hiragana).length + Object.keys(tentenHiragana).length + Object.keys(doubleHiragana).length);
 
 	let chosenHiraganas = [];
@@ -36,19 +36,24 @@ function askHiragana(message, cache) {
 
 	let emojiArray = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine'];
 
-	chosenHiraganas.map(function(c, index) {
-		embed.addField(":" + emojiArray[index] + ": " + hiraganaObject[c], '‎', true)
-	})
+	let noIndex = false;
+	if (!(args.length == 1 && args[0] == 'hidden')) {
+		chosenHiraganas.map(function(c, index) {
+			embed.addField(":" + emojiArray[index] + ": " + hiraganaObject[c], '‎', true)
+		})
+	} else {
+		noIndex = true;
+	}
 
 	message.channel.send(embed);
 
-	cache.set("expectedAnswer" + message.author.id, {"index": guessHiraganaIndex, "text": hiraganaObject[chosenHiraganas[guessHiraganaIndex]]}, 3600);
+	cache.set("expectedAnswer" + message.author.id, {"index": noIndex ? null : guessHiraganaIndex, "text": hiraganaObject[chosenHiraganas[guessHiraganaIndex]], "quiz": "quizHiragana", "args": args}, 3600);
 }
 
 module.exports = {
 	name: 'quizhiragana',
 	description: 'Launch a quiz to practice hiragana',
 	execute(message, args, cache) {
-		askHiragana(message, cache);
+		askHiragana(message, args, cache);
 	}
 }

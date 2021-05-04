@@ -1,6 +1,10 @@
 
 const quizHiragana = require('./quizHiragana');
 
+const quizzes = {
+	"quizHiragana": quizHiragana
+}
+
 function answer(message, args, cache)
 {
 	let expected = cache.get("expectedAnswer" + message.author.id);
@@ -22,7 +26,7 @@ function answer(message, args, cache)
 	} else {
 		message.channel.send('❌ This hiragana is ' + expected['text']);
 	}
-	quizHiragana.execute(message, args, cache);
+	quizzes[expected['quiz']].execute(message, expected['args'], cache);
 }
 
 module.exports = {
