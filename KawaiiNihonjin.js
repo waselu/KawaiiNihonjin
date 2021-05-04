@@ -1,6 +1,8 @@
 const Discord = require('discord.js');
 const fs = require('fs')
-const { prefix } = require('./config.json');
+const { prefix, hiraganas } = require('./config.json');
+const NodeCache = require("node-cache");
+const cache = new NodeCache();
 
 const client = new Discord.Client();
 client.commands = new Discord.Collection();
@@ -29,9 +31,10 @@ client.on('message', function(message) {
 	const commandName = args.shift().toLowerCase();
 
 	if (!client.commands.has(commandName)) return;
+
 	const command = client.commands.get(commandName);
 
-	command.execute(message, args);
+	command.execute(message, args, cache);
 })
 
 client.login('ODM3NjYwODEwOTU1OTgwODAw.YIvybA.UJONzPgw5lVb_iFGObVgEOX-rjg');
