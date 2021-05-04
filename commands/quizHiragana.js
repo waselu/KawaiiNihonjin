@@ -11,7 +11,6 @@ function askHiragana(message, cache) {
 	let guessHiragana = '';
 	let hiraganaObject = {};
 
-
 	if (choosing < Object.keys(hiragana).length) {
 		hiraganaObject = hiragana;
 	} else if (choosing < Object.keys(hiragana).length + Object.keys(tentenHiragana).length) {
@@ -43,7 +42,7 @@ function askHiragana(message, cache) {
 
 	message.channel.send(embed);
 
-	cache.set("expectedAnswer" + message.author.id, {"index": guessHiraganaIndex, "hiragana": hiraganaObject[chosenHiraganas[guessHiraganaIndex]]}, 3600);
+	cache.set("expectedAnswer" + message.author.id, {"index": guessHiraganaIndex, "text": hiraganaObject[chosenHiraganas[guessHiraganaIndex]]}, 3600);
 }
 
 module.exports = {
