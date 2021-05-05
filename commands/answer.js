@@ -1,8 +1,10 @@
 
 const quizHiragana = require('./quizHiragana');
+const quizHiraganaRomanji = require('./quizHiraganaRomanji');
 
 const quizzes = {
-	"quizHiragana": quizHiragana
+	"quizHiragana": quizHiragana,
+	"quizHiraganaRomanji": quizHiraganaRomanji
 }
 
 function answer(message, args, cache)
@@ -13,18 +15,30 @@ function answer(message, args, cache)
 		return;
 	}
 
-	texts = expected['romanji'][0].trim().split(',');
 	found = false;
-	texts.map(function(text) {
-		if (text.trim() == args[0].trim()) {
+	displayAttribute = '';
+
+	if (expected['romanji'] != null) {
+		displayAttribute = 'romanji';
+		texts = expected['romanji'][0].trim().split(',');
+		texts.map(function(text) {
+			if (text.trim() == args[0].trim()) {
+				found = true;
+			}
+		})
+	}
+
+	if (expected['kata'] != null) {
+		displayAttribute = 'kata';
+		if (expected['kata'] == args[0].trim()) {
 			found = true;
 		}
-	})
+	}
 
 	if (args[0] == expected['index'] || found) {
-		message.channel.send('✅ This hiragana is indeed ' + expected['romanji']);
+		message.channel.send('✅ This hiragana is indeed ' + expected[displayAttribute]);
 	} else {
-		message.channel.send('❌ This hiragana is ' + expected['romanji']);
+		message.channel.send('❌ This hiragana is ' + expected[displayAttribute]);
 	}
 	quizzes[expected['quiz']].execute(message, expected['args'], cache);
 }

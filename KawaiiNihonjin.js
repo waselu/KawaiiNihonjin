@@ -9,6 +9,7 @@ client.commands = new Discord.Collection();
 
 const commandAliases = {
 	'qh': 'quizhiragana',
+	'qhr': 'quizhiraganaromanji',
 	'a': 'answer'
 }
 
