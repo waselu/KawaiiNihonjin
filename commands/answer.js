@@ -13,7 +13,7 @@ function answer(message, args, cache)
 		return;
 	}
 
-	texts = expected['text'][0].trim().split(',');
+	texts = expected['romanji'][0].trim().split(',');
 	found = false;
 	texts.map(function(text) {
 		if (text.trim() == args[0].trim()) {
@@ -22,9 +22,9 @@ function answer(message, args, cache)
 	})
 
 	if (args[0] == expected['index'] || found) {
-		message.channel.send('✅ This hiragana is indeed ' + expected['text']);
+		message.channel.send('✅ This hiragana is indeed ' + expected['romanji']);
 	} else {
-		message.channel.send('❌ This hiragana is ' + expected['text']);
+		message.channel.send('❌ This hiragana is ' + expected['romanji']);
 	}
 	quizzes[expected['quiz']].execute(message, expected['args'], cache);
 }

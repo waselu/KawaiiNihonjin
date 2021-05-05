@@ -1,36 +1,16 @@
 
 const randomGenerator = require('../utils/randomNumber');
-const { hiragana, tentenHiragana, doubleHiragana } = require('../config.json');
 const { MessageEmbed } = require('discord.js');
 
+const getRandom = require('../utils/getRandom');
+
 function askHiragana(message, args, cache) {
-	let choosing = randomGenerator.random(0, Object.keys(hiragana).length + Object.keys(tentenHiragana).length + Object.keys(doubleHiragana).length);
-
-	let chosenHiraganas = [];
+	let chosenHiraganas = getRandom.get10HiraganasSameSource();
 	let guessHiraganaIndex = randomGenerator.random(0, 9);
-	let guessHiragana = '';
-	let hiraganaObject = {};
-
-	if (choosing < Object.keys(hiragana).length) {
-		hiraganaObject = hiragana;
-	} else if (choosing < Object.keys(hiragana).length + Object.keys(tentenHiragana).length) {
-		hiraganaObject = tentenHiragana;
-	} else {
-		hiraganaObject = doubleHiragana;
-	}
-
-	while (chosenHiraganas.length != 10) {
-		choosing = randomGenerator.random(0, Object.keys(hiraganaObject).length - 1);
-		if (chosenHiraganas.includes(Object.keys(hiraganaObject)[choosing])) {
-			continue;
-		}
-		chosenHiraganas.push(Object.keys(hiraganaObject)[choosing]);
-	}
-
-	guessHiragana = chosenHiraganas[guessHiraganaIndex];
+	let guessHiragana = chosenHiraganas[guessHiraganaIndex];
 
 	let embed = new MessageEmbed()
-		.setTitle(guessHiragana)
+		.setTitle(guessHiragana['kata'])
 		.setDescription('What is this hiragana ?')
 		.setFooter('Use the :answer command to answer')
 
@@ -39,15 +19,14 @@ function askHiragana(message, args, cache) {
 	let noIndex = false;
 	if (!(args.length == 1 && args[0] == 'hidden')) {
 		chosenHiraganas.map(function(c, index) {
-			embed.addField(":" + emojiArray[index] + ": " + hiraganaObject[c], '‎', true)
+			embed.addField(":" + emojiArray[index] + ": " + c['romanji'], '‎', true)
 		})
 	} else {
 		noIndex = true;
 	}
 
+	cache.set("expectedAnswer" + message.author.id, {"index": noIndex ? null : guessHiraganaIndex, "romanji": guessHiragana['romanji'], "quiz": "quizHiragana", "args": args}, 3600);
 	message.channel.send(embed);
-
-	cache.set("expectedAnswer" + message.author.id, {"index": noIndex ? null : guessHiraganaIndex, "text": hiraganaObject[chosenHiraganas[guessHiraganaIndex]], "quiz": "quizHiragana", "args": args}, 3600);
 }
 
 module.exports = {
