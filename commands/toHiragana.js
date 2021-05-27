@@ -6,7 +6,7 @@ function toHiragana(message, args, cache)
 {
     let sentence = args.join('  ').replace(/ô/g, 'ou').replace(/â/g, 'aa').replace(/û/g, 'uu').replace(/î/g, 'ii');
     let hiraganas = wanakana.toHiragana(sentence);
-    if (!wanakana.isJapanese(hiraganas)) {
+    if (!wanakana.isJapanese(hiraganas.replace(/ /g, ''))) {
         utils.sendBotMessage(message, 'Your message could not be transcribed into hiragana, please check your spelling');
         return;
     }

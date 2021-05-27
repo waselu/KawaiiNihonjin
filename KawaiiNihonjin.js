@@ -28,6 +28,7 @@ for (let [alias, commandName] of Object.entries(commandAliases)) {
 //Mandatory
 //toRomanji command (do not check output integrity)
 //Rework alias array (in config file, command name as key instead of alias, like elsword list manager)
+//Use kuroshiro to handle kanji as well
 
 client.on('ready', function() {
 	console.log(`logged in as ${client.user.tag}`);
