@@ -26,7 +26,7 @@ for (let [alias, commandName] of Object.entries(commandAliases)) {
 }
 
 //Mandatory
-//toHiragana, toRomanji commands
+//toRomanji command (do not check output integrity)
 //Rework alias array (in config file, command name as key instead of alias, like elsword list manager)
 
 client.on('ready', function() {
