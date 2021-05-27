@@ -1,8 +1,10 @@
 const Discord = require('discord.js');
 const fs = require('fs')
-const { prefix, hiraganas } = require('./config.json');
+const { prefix } = require('./config.json');
+const commandManager = require('./utils/commandManager');
 const NodeCache = require("node-cache");
 const cache = new NodeCache();
+require('discord-reply');
 
 const client = new Discord.Client();
 client.commands = new Discord.Collection();
@@ -24,26 +26,15 @@ for (let [alias, commandName] of Object.entries(commandAliases)) {
 }
 
 //Mandatory
-//toHiragana command
-//toRomanji command
-//quizRomanjiHirgana command
-//answer call last quiz instead of quizhiragana
+//toHiragana, toRomanji commands
+//Rework alias array (in config file, command name as key instead of alias, like elsword list manager)
 
 client.on('ready', function() {
 	console.log(`logged in as ${client.user.tag}`);
 });
 
 client.on('message', function(message) {
-	if (!message.content.startsWith(prefix) || message.author.bot) return;
-
-	const args = message.content.slice(prefix.length).trim().split(/ +/);
-	const commandName = args.shift().toLowerCase();
-
-	if (!client.commands.has(commandName)) return;
-
-	const command = client.commands.get(commandName);
-
-	command.execute(message, args, cache);
+	commandManager.commandManager(message, client, cache)
 })
 
 client.login('ODM3NjYwODEwOTU1OTgwODAw.YIvybA.UJONzPgw5lVb_iFGObVgEOX-rjg');

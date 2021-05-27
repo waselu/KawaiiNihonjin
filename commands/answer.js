@@ -1,6 +1,7 @@
 
 const quizHiragana = require('./quizHiragana');
 const quizHiraganaRomanji = require('./quizHiraganaRomanji');
+const utils = require('../utils/utils');
 
 const quizzes = {
 	"quizHiragana": quizHiragana,
@@ -36,9 +37,9 @@ function answer(message, args, cache)
 	}
 
 	if (args[0] == expected['index'] || found) {
-		message.channel.send('✅ This hiragana is indeed ' + expected[displayAttribute]);
+		utils.sendBotMessage(message, '✅ This hiragana is indeed ' + expected[displayAttribute]);
 	} else {
-		message.channel.send('❌ This hiragana is ' + expected[displayAttribute]);
+		utils.sendBotMessage(message, '❌ This hiragana is ' + expected[displayAttribute]);
 	}
 	quizzes[expected['quiz']].execute(message, expected['args'], cache);
 }
@@ -46,14 +47,9 @@ function answer(message, args, cache)
 module.exports = {
 	name: 'answer',
 	description: 'Answer any question asked by かわいい日本人',
+	nbArgsMin: 1,
+	nbArgsMax: 1,
 	execute(message, args, cache) {
-		if (args.length == 0) {
-			message.channel.send('No answer provided');
-			return;
-		} else if (args.length != 1) {
-			message.channel.send('Too many answers provided');
-			return;
-		}
 		answer(message, args, cache);
 	}
 }

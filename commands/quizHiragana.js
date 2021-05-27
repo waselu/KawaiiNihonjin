@@ -2,6 +2,7 @@
 const { MessageEmbed } = require('discord.js');
 const randomGenerator = require('../utils/randomNumber');
 const getRandom = require('../utils/getRandom');
+const utils = require('../utils/utils');
 
 function askHiragana(message, args, cache) {
 	let chosenHiraganas = getRandom.get10HiraganasSameSource();
@@ -25,12 +26,13 @@ function askHiragana(message, args, cache) {
 	}
 
 	cache.set("expectedAnswer" + message.author.id, {"index": noIndex ? null : guessHiraganaIndex, "romanji": guessHiragana['romanji'], "kata": null, "quiz": "quizHiragana", "args": args}, 3600);
-	message.channel.send(embed);
+	utils.sendBotMessage(message, embed);
 }
 
 module.exports = {
 	name: 'quizhiragana',
 	description: 'Launch a quiz to practice hiragana',
+	nbArgsMax: 0,
 	execute(message, args, cache) {
 		askHiragana(message, args, cache);
 	}
